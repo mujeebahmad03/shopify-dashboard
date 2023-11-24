@@ -469,11 +469,13 @@ header {
   align-items: center;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s ease-in-out; 
+  visibility: hidden;
+  transition: all 0.5s ease-in-out;
 }
 
 .list-details.active {
   max-height: 500px;
+  visibility: visible;
 }
 
 .is-active {
