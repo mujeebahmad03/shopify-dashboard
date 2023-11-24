@@ -54,13 +54,13 @@ function toggleState(buttonIndex) {
       // Hide other list-details
       listItems.forEach((item) => {
         if (item !== nextStep) {
-          item.querySelector(".list-details").style.display = "none";
+          item.querySelector(".list-details").classList.remove("active");
           item.classList.remove("is-active");
         }
       });
 
       // Show the next incomplete step
-      nextListDetails.style.display = "flex";
+      nextListDetails.classList.add("active");
 
       // Scroll to the next incomplete step
       nextListTitle.scrollIntoView({ behavior: "smooth" });
