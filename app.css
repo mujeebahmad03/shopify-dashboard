@@ -63,6 +63,7 @@ header {
 .controls {
   display: flex;
 }
+
 .container {
   max-width: 1500px;
   margin: auto;
@@ -340,6 +341,21 @@ header {
   box-shadow: 0px -1px 0px 0px #b5b5b5 inset;
 }
 
+.cta a:hover {
+  background: #f7f7f7;
+  box-shadow: 0px -1px 0px 0px #b5b5b5 inset;
+}
+
+.cta a:active {
+  background: #f7f7f7;
+  box-shadow: 0px 2px 1.5px 0px #e2e2e2 inset;
+}
+
+.cta a:focus-visible {
+  box-shadow: 0px 0px 0px 3px #005bd3, 0px 0px 0px 1px #fff,
+    0px -1px 0px 0px #b5b5b5 inset;
+}
+
 .close-btn {
   padding: 5px;
   border-radius: 5px;
@@ -560,6 +576,20 @@ header {
 .list-info .button-group button:last-child {
   background: inherit;
   color: var(--grey-nav-300);
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.list-info .button-group button:last-child:hover {
+  background: #e7e7e7;
+}
+
+.list-info .button-group button:last-child:active {
+  background: #e0e0e0;
+}
+
+.list-info .button-group button:last-child:active {
+  border: 2px solid var(--states-focused, #005bd3);
 }
 
 .illustration {
