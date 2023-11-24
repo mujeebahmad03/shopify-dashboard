@@ -464,9 +464,16 @@ header {
 }
 
 .list-details {
-  display: none;
+  display: flex;
   justify-content: space-between;
   align-items: center;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out; 
+}
+
+.list-details.active {
+  max-height: 500px;
 }
 
 .is-active {

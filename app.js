@@ -107,19 +107,19 @@ function toggleListDetails(buttonIndex) {
   // Hide other list-details
   listItems.forEach((item) => {
     if (item !== currentListItem) {
-      item.querySelector(".list-details").style.display = "none";
+      item.querySelector(".list-details").classList.remove("active");
       item.classList.remove("is-active");
     }
   });
 
   currentListItem.classList.add("is-active");
   const listDetails = currentListItem.querySelector(".list-details");
-  const isVisible = listDetails.style.display === "flex";
+  const isVisible = listDetails.classList.contains("active");
 
   if (!isVisible || (isVisible && listDetails !== visibleListDetails)) {
     // Toggle the visibility of list-details only if it's not already visible
     // or if it's visible but corresponds to a different list-title
-    listDetails.style.display = isVisible ? "none" : "flex";
+    listDetails.classList.toggle("active");
     visibleListDetails = isVisible ? null : listDetails;
   }
 }
