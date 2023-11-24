@@ -90,6 +90,40 @@ function toggleState(buttonIndex) {
   }
 }
 
+// Add event listener for list-title elements
+const listTitles = document.querySelectorAll(".list-title");
+listTitles.forEach((title, index) => {
+  title.addEventListener("click", () => {
+    toggleListDetails(index + 1);
+  });
+});
+
+let visibleListDetails = null;
+
+function toggleListDetails(buttonIndex) {
+  const listItems = document.querySelectorAll(".guide-list");
+  const currentListItem = listItems[buttonIndex - 1];
+
+  // Hide other list-details
+  listItems.forEach((item) => {
+    if (item !== currentListItem) {
+      item.querySelector(".list-details").style.display = "none";
+      item.classList.remove("is-active");
+    }
+  });
+
+  currentListItem.classList.add("is-active");
+  const listDetails = currentListItem.querySelector(".list-details");
+  const isVisible = listDetails.style.display === "flex";
+
+  if (!isVisible || (isVisible && listDetails !== visibleListDetails)) {
+    // Toggle the visibility of list-details only if it's not already visible
+    // or if it's visible but corresponds to a different list-title
+    listDetails.style.display = isVisible ? "none" : "flex";
+    visibleListDetails = isVisible ? null : listDetails;
+  }
+}
+
 const alertButton = document.getElementById("alert-button");
 const profileButton = document.getElementById("profile-button");
 const notificationMenu = document.getElementById("notification-menu");
@@ -129,5 +163,4 @@ toggleBtn.addEventListener("click", function () {
 
   setupGuidePlan.style.display =
     upArrow.style.opacity === "1" ? "block" : "none";
-
 });
