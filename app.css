@@ -1,14 +1,14 @@
 :root {
   --grey-nav-50: #656266;
-  --grey-nav-100: #616161;
-  --grey-nav-200: #322f33;
+  --grey-nav-100: #b5b5b5;
+  --grey-nav-200: #303030;
   --grey-nav-300: #1c181d;
 
   --font-grey-1: #e3e3e3;
   --font-grey-2: #616161;
   --font-grey-3: #475467;
 
-  --strokes-grey-1: #ebebeb;
+  --strokes-grey-1: #616161;
   --strokes-grey-2: rgba(255, 255, 255, 0.9);
   --strokes-grey-3: rgba(255, 255, 255, 0.2);
 
@@ -19,7 +19,7 @@
   --bg-white: #fff;
   --bg--off-white: #f1f1f1;
 
-  --transition-prop: 0.3s ease-in-out;
+  --transition-prop: 0.3s ease-in;
 }
 
 *,
@@ -56,21 +56,19 @@ body {
   background: var(--bg--off-white);
 }
 
-header {
+.top-header {
   background: var(--grey-nav-300);
-  padding: 1rem 2rem;
-}
-
-.container,
-.controls {
-  display: flex;
-}
-
-.container {
-  max-width: 1500px;
+  padding: 0 16px;
+  height: 56px;
+  max-width: 1440px;
   margin: auto;
   justify-content: space-between;
   align-items: center;
+}
+
+.top-header,
+.controls {
+  display: flex;
 }
 
 .logo {
@@ -90,14 +88,16 @@ header {
   align-items: center;
   gap: 6px;
   position: relative;
+  font-size: 13px;
+  border-radius: 8px;
 }
 
 .search-bar svg {
   display: inline;
   position: absolute;
-  top: 0.6rem;
-  left: 1rem;
-  margin-right: 1rem;
+  top: 7px;
+  left: 15px;
+  margin-right: 6px;
 }
 
 .search-bar input,
@@ -129,7 +129,7 @@ header {
 }
 
 .controls {
-  gap: 0.3rem;
+  gap: 8px;
   border-radius: 5px;
 }
 
@@ -143,12 +143,15 @@ header {
 .alert {
   display: flex;
   align-items: center;
-  padding: 0.3rem;
+  padding: 8px;
 }
 
 .profile-tag {
   padding: 0 0 0 0.4rem;
-  font-size: 0.8rem;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--font-grey-1);
+  padding-left: 8px;
 }
 
 .alert:hover,
@@ -169,10 +172,10 @@ header {
 }
 
 .profile-tag .initials {
-  margin-left: 0.3rem;
-  padding: 0.3rem;
+  margin-left: 8px;
+  padding: 8px;
   background: rgb(54, 251, 161);
-  color: var(--font-grey-3);
+  color: rgba(0, 0, 0, 0.4);
   border-radius: 5px;
   font-size: 0.75rem;
 }
@@ -180,54 +183,71 @@ header {
 .notification,
 .profile {
   position: absolute;
-  top: 80px;
+  top: 65px;
   right: 0;
   z-index: -1;
   opacity: 0;
   visibility: hidden;
   margin: 0 1rem;
   background: var(--bg-white);
-  border-radius: 10px;
+  border-radius: 14px;
   font-size: 0.8rem;
-  /* transition: all var(--transition-prop); */
+  border: 1px solid var(--stroke-s-50, #dbdbdb);
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05);
 }
 
 .notification {
-  padding: 1rem;
+  padding: 16px;
 }
 
 .notification-title {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--grey-nav-200);
+}
+
+.notification-title .button-group button:focus .marked rect {
+  stroke-width: 1px;
+  stroke: var(--states-focused, #005bd3);
 }
 
 .notification p {
-  background: var(--font-grey-1);
-  padding: 1rem;
+  background: var(--bg--off-white);
+  padding: 16px;
   text-align: center;
+  font-size: calc(13 / 16 * 1rem);
+  color: var(--font-grey-2);
+  font-weight: 600;
 }
 
 .profile {
-  padding: 0.3rem;
-  width: 300px;
+  padding: 6px 0px;
+  width: 320px;
+  border-radius: 14px;
 }
 
 .profile a {
   display: inline-block;
   color: var(--grey-nav-200);
   width: 100%;
-  border-radius: 5px;
-  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background var(--transition-prop);
 }
 
-.profile a:hover {
+.profile a:hover,
+.notification-title .button-group button:hover {
   background: var(--bg--off-white);
 }
 
-.profile a:focus,
-.profile button:focus {
+.profile a:focus {
   border: 2px solid var(--state-focused);
+}
+
+.profile a:active {
+  background: #f0f0f0;
 }
 
 .alert-active,
@@ -237,106 +257,101 @@ header {
   z-index: 10;
 }
 
-.profile-title,
-.profile-label a {
+.profile-title a {
   display: flex;
   align-items: center;
+  padding: 4px 12px 4px 8px;
+  border-radius: 8px;
 }
 
-.profile-title {
-  width: 100%;
-  justify-content: space-between;
-  background: var(--bg--off-white);
-  border-radius: 5px;
-  padding-right: 0.5rem;
+.profile-title a span:first-child {
+  height: 28px;
+  margin-right: 8px;
+  padding: 7px 5px 9px 6px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.4);
+  border-radius: 5.25px;
+  background: #36fba1;
+}
+.profile-title a span:nth-child(2) {
+  font-size: 13px;
   font-weight: 600;
 }
 
-.profile-title a {
-  padding: 0.5rem;
+.profile-title a svg {
+  margin-left: auto;
 }
 
-.profile-title a::before {
-  content: "DC";
-  margin-right: 0.3rem;
-  padding: 0.4rem;
-  background: rgb(54, 251, 161);
-  color: var(--font-grey-3);
-  border-radius: 5px;
+.profile-store a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.profile-store a,
+.menu-list a {
+  padding: 6px;
+  font-size: 13px;
   font-weight: 400;
-}
-
-.profile-label a {
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 5px;
-  margin-bottom: 0.2rem;
-  transition: background var(--transition-prop);
+  color: var(--grey-nav-200);
 }
 
 .profile hr {
   position: relative;
   top: 2px;
-  left: -5px;
-  width: calc(100% + 0.8rem);
-  border: 1px solid var(--strokes-grey-1);
+  left: 0px;
+  width: calc(100% + 1.5px);
+  border: 1px solid #e1e1e1;
+  margin: 2px 0;
 }
 
-.profile-label a:hover {
-  background: var(--bg--off-white);
+.menu-list,
+.profile-title,
+.profile-store {
+  padding: 0 6px;
 }
 
-.profile-label a:active {
-  background: #f0f0f0;
+.menu-list a {
+  margin: 4px 0;
 }
 
-.profile-label a:focus {
-  border: 2px solid var(--state-focused);
-}
-
-.menu-list {
-  margin: 0.5rem 0;
-  color: var(--font-grey-3);
-}
-
-.profile-control {
-  margin-top: 0.4rem;
+.menu-list .profile-name {
+  padding: 8px;
+  font-weight: 500;
 }
 
 .profile-name span {
   display: block;
-  color: var(--grey-nav-50);
-  font-size: 0.7rem;
+  color: var(--strokes-grey-1);
+  font-size: 12px;
+  font-weight: 400;
 }
 
-.profile-control button {
-  padding: 0.5rem;
-  margin-top: 0.2rem;
-}
 .main-area {
   width: 70%;
   max-width: 1200px;
-  margin: 2rem auto;
-  font-size: 0.8rem;
+  margin: 32px auto;
+  font-size: 13px;
 }
 
 .message-info {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px 8px 12px 16px;
   border-radius: 10px;
   background: var(--grey-nav-300);
   color: var(--font-grey-1);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .button-group {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .cta {
@@ -355,9 +370,9 @@ header {
   background: var(--bg-white);
   color: var(--grey-nav-200);
   font-weight: 600;
+  font-size: 12px;
   box-shadow: 0px -1px 0px 0px #b5b5b5 inset;
-  transition: background var(--transition-prop),
-    box-shadow var(--transition-prop);
+  transition: all var(--transition-prop);
 }
 
 .cta a:hover {
@@ -376,8 +391,8 @@ header {
 }
 
 .close-btn {
-  padding: 5px;
-  border-radius: 5px;
+  padding: 6px;
+  border-radius: 6px;
   transition: background var(--transition-prop);
 }
 
@@ -388,7 +403,7 @@ header {
 .guide-section {
   padding: 8px;
   background: var(--bg-white);
-  border-radius: 10px;
+  border-radius: 18px;
 }
 
 .toggle-list {
@@ -396,7 +411,7 @@ header {
   width: 30px;
   height: 30px;
   padding: 6px 12px;
-  border-radius: calc(6 / 16 * 1rem);
+  border-radius: 6px;
   transition: background var(--transition-prop);
 }
 
@@ -412,7 +427,7 @@ header {
   border: 2px solid var(--state-focused);
 }
 
-.toggle-list img {
+.toggle-list svg {
   position: absolute;
   top: 3px;
   left: 3px;
@@ -429,26 +444,29 @@ header {
 
 .setup-guide {
   padding: 8px;
-}
-
-.setup {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
+  align-items: flex-start;
+  color: var(--grey-nav-200);
+}
+
+.setup-info h3{
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .setup-progress {
   font-size: 12px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
+  gap: 8px;
+  margin-top: 16px;
 }
 
 .progress-meter {
   display: inline-block;
-  width: 4.5rem;
+  width: 72px;
   height: 4px;
   position: relative;
   background-color: #e3e3e3;
@@ -462,7 +480,7 @@ header {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: var(--grey-nav-300);
+  background-color: #1a1a1a;
   border-radius: 2px;
   transition: width 500ms linear;
 }
@@ -473,11 +491,11 @@ header {
 
 .guide-list {
   display: flex;
-  padding: 8px;
+  padding: 8px 8px 12px 8px;
   border-radius: 10px;
   color: var(--font-grey-2);
   gap: 8px;
-  font-size: calc(14 / 16 * 1rem);
+  font-size: calc(13 / 16 * 1rem);
 }
 
 .list {
@@ -525,6 +543,21 @@ header {
   display: block;
   height: fit-content;
   position: relative;
+  border-radius: 6px;
+  transition: all var(--transition-prop);
+}
+
+.check-box:active {
+  background: #e0e0e0;
+}
+
+.check-box:hover {
+  background: #e7e7e7;
+}
+
+.check-box:focus {
+  border: 2px solid var(--states-focused, #005bd3);
+  background: #fff;
 }
 
 .svg-container {
@@ -533,24 +566,15 @@ header {
   height: 30px;
 }
 
-.svg-container:hover .unchecked .dashed {
-  opacity: 0;
+.svg-container:hover .unchecked circle {
+  stroke-dasharray: 0 0;
 }
-
-.svg-container:hover .unchecked .solid {
-  opacity: 1;
-}
-
-.svg-container .unchecked .solid {
-  opacity: 0;
-}
-
-.svg-container .unchecked .dashed {
-  opacity: 1;
+.svg-container:focus .unchecked circle {
+  stroke-dasharray: 0 0;
 }
 
 .loading {
-  animation: rotate 0.3s linear infinite;
+  animation: rotate 0.2s linear infinite;
 }
 
 @keyframes rotate {
@@ -562,21 +586,37 @@ header {
   }
 }
 
-.svg-container .unchecked .dashed,
-.svg-container .unchecked .solid {
-  transition: opacity var(--transition-prop);
+@keyframes zoom-in {
+  from {
+    transform: scale(0) rotate(270deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.checked {
+  animation: zoom-in 0.3s linear;
+}
+
+.svg-container .unchecked circle {
+  transition: all var(--transition-prop);
 }
 
 .svg-container svg.active {
   opacity: 1;
+  visibility: visible;
 }
 
 .svg-container svg {
   transition: 250ms;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 3px;
+  left: 3px;
   opacity: 0;
+  visibility: hidden;
 }
 
 .list-info {
