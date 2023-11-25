@@ -1,3 +1,14 @@
+const alertButton = document.getElementById("alert-button");
+const profileButton = document.getElementById("profile-button");
+const notificationMenu = document.getElementById("notification-menu");
+const profileNav = document.getElementById("profile-nav");
+const toggleBtn = document.getElementById("toggle-btn");
+const closeBtn = document.getElementById("close-btn");
+const ctaSection = document.getElementById("cta-section");
+const downArrow = document.querySelector(".down-arrow");
+const upArrow = document.querySelector(".up-arrow");
+const setupGuidePlan = document.getElementById("setup-guide-plan");
+
 function toggleState(buttonIndex) {
   const listItems = document.querySelectorAll(".guide-list");
   const currentListItem = listItems[buttonIndex - 1];
@@ -124,42 +135,75 @@ function toggleListDetails(buttonIndex) {
   }
 }
 
-const alertButton = document.getElementById("alert-button");
-const profileButton = document.getElementById("profile-button");
-const notificationMenu = document.getElementById("notification-menu");
-const profileNav = document.getElementById("profile-nav");
-const toggleBtn = document.getElementById("toggle-btn");
-const closeBtn = document.getElementById("close-btn");
-const ctaSection = document.getElementById("cta-section");
-const downArrow = document.querySelector(".down-arrow");
-const upArrow = document.querySelector(".up-arrow");
-const setupGuidePlan = document.querySelector(".setup-guide-plan");
+const toggleClass = ({
+  className,
+  targetElement,
+  triggerElement,
+  labelWhenClosed = "",
+  labelWhenOpen = "",
+}) => {
+  if (targetElement) {
+    const isActive = targetElement.classList.toggle(className);
+    const allMenuItems = targetElement.querySelectorAll('[role="menuitem"]');
 
-const toggleClass = (className, element) => {
-  if (element) {
-    element.classList.toggle(className);
+    // Toggle aria-expanded attribute on triggerElement
+    if (triggerElement) {
+      if (triggerElement.getAttribute("aria-expanded")) {
+        triggerElement.setAttribute("aria-expanded", isActive.toString());
+        allMenuItems.item(0).focus();
+        if (!isActive) {
+          // If the menu is being collapsed, set focus back to the trigger element
+          triggerElement.focus();
+        }
+      }
+      if (triggerElement.getAttribute("aria-label")) {
+        // Change aria-label based on the state
+        const newLabel = isActive
+          ? labelWhenOpen || "Expanded"
+          : labelWhenClosed || "Collapsed";
+        triggerElement.setAttribute("aria-label", newLabel);
+      }
+    }
+
+    // Toggle aria-hidden attribute on targetElement
+    if (targetElement.getAttribute("aria-hidden")) {
+      targetElement.setAttribute("aria-hidden", (!isActive).toString());
+    }
   } else {
     console.error("Invalid element provided to toggleClass function");
   }
 };
 
 alertButton.addEventListener("click", () =>
-  toggleClass("alert-active", notificationMenu)
+  toggleClass({
+    className: "alert-active",
+    targetElement: notificationMenu,
+    triggerElement: alertButton,
+  })
 );
 
 profileButton.addEventListener("click", () =>
-  toggleClass("profile-active", profileNav)
+  toggleClass({
+    className: "profile-active",
+    targetElement: profileNav,
+    triggerElement: profileButton,
+    labelWhenClosed: "Show Profile",
+    labelWhenOpen: "Hide Profile",
+  })
 );
 
-closeBtn.addEventListener("click", () => (ctaSection.style.display = "none"));
+closeBtn.addEventListener("click", () => {
+  ctaSection.style.display = "none";
+  ctaSection.setAttribute("aria-hidden", "true");
+});
 
 // Set initial state
-downArrow.style.opacity = "1";
-upArrow.style.opacity = "0";
+downArrow.style.opacity = "0";
+upArrow.style.opacity = "1";
 
 toggleBtn.addEventListener("click", function () {
-  downArrow.style.opacity = downArrow.style.opacity === "1" ? "0" : "1";
-  upArrow.style.opacity = upArrow.style.opacity === "0" ? "1" : "0";
+  downArrow.style.opacity = downArrow.style.opacity === "0" ? "1" : "0";
+  upArrow.style.opacity = upArrow.style.opacity === "1" ? "0" : "1";
 
   setupGuidePlan.style.display =
     upArrow.style.opacity === "1" ? "block" : "none";
