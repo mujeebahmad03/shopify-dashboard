@@ -139,22 +139,20 @@ const toggleClass = ({
   className,
   targetElement,
   triggerElement,
+  meuItemsSelector,
   labelWhenClosed = "",
   labelWhenOpen = "",
 }) => {
   if (targetElement) {
     const isActive = targetElement.classList.toggle(className);
-    const allMenuItems = targetElement.querySelectorAll('[role="menuitem"]');
 
     // Toggle aria-expanded attribute on triggerElement
     if (triggerElement) {
       if (triggerElement.getAttribute("aria-expanded")) {
         triggerElement.setAttribute("aria-expanded", isActive.toString());
-        allMenuItems.item(0).focus();
-        if (!isActive) {
-          // If the menu is being collapsed, set focus back to the trigger element
-          triggerElement.focus();
-        }
+        const allMenuItems = targetElement.querySelectorAll(meuItemsSelector);
+        if (allMenuItems) allMenuItems.item(0).focus();
+        if (!isActive) triggerElement.focus(); // If the menu is being collapsed, set focus back to the trigger element
       }
       if (triggerElement.getAttribute("aria-label")) {
         // Change aria-label based on the state
@@ -187,6 +185,7 @@ profileButton.addEventListener("click", () =>
     className: "profile-active",
     targetElement: profileNav,
     triggerElement: profileButton,
+    meuItemsSelector: '[role="menuitem"]',
     labelWhenClosed: "Show Profile",
     labelWhenOpen: "Hide Profile",
   })
