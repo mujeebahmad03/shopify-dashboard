@@ -135,59 +135,111 @@ function toggleListDetails(buttonIndex) {
   }
 }
 
-const toggleClass = ({
+function toggleMenu({
+  menuTrigger,
+  menu,
   className,
-  targetElement,
-  triggerElement,
-  meuItemsSelector,
-  labelWhenClosed = "",
-  labelWhenOpen = "",
-}) => {
-  if (targetElement) {
-    const isActive = targetElement.classList.toggle(className);
+  labelWhenClosed,
+  labelWhenOpen,
+  menuItemsSelector,
+}) {
+  const allMenuItems = menu.querySelectorAll(menuItemsSelector);
+  const isExpanded = menuTrigger.getAttribute("aria-expanded") === "true";
+  menu.classList.toggle(className);
 
-    // Toggle aria-expanded attribute on triggerElement
-    if (triggerElement) {
-      if (triggerElement.getAttribute("aria-expanded")) {
-        triggerElement.setAttribute("aria-expanded", isActive.toString());
-        const allMenuItems = targetElement.querySelectorAll(meuItemsSelector);
-        if (allMenuItems) allMenuItems.item(0).focus();
-        if (!isActive) triggerElement.focus(); // If the menu is being collapsed, set focus back to the trigger element
-      }
-      if (triggerElement.getAttribute("aria-label")) {
-        // Change aria-label based on the state
-        const newLabel = isActive
-          ? labelWhenOpen || "Expanded"
-          : labelWhenClosed || "Collapsed";
-        triggerElement.setAttribute("aria-label", newLabel);
-      }
-    }
+  toggleAriaLabel(isExpanded, menuTrigger, labelWhenOpen, labelWhenClosed);
 
-    // Toggle aria-hidden attribute on targetElement
-    if (targetElement.getAttribute("aria-hidden")) {
-      targetElement.setAttribute("aria-hidden", (!isActive).toString());
+  if (isExpanded) {
+    closeMenu(menuTrigger, menu);
+    return;
+  }
+
+  openMenu(menuTrigger, menu, allMenuItems, className);
+}
+
+const closeMenu = (menuTrigger, menu) => {
+  menuTrigger.setAttribute("aria-expanded", "false");
+  menu.setAttribute("aria-hidden", "true");
+  menuTrigger.focus();
+};
+
+const toggleAriaLabel = (
+  isExpanded,
+  menuTrigger,
+  labelWhenOpen,
+  labelWhenClosed
+) => {
+  if (menuTrigger.getAttribute("aria-label")) {
+    const newLabel = isExpanded
+      ? labelWhenOpen || "Expanded"
+      : labelWhenClosed || "Collapsed";
+    menuTrigger.setAttribute("aria-label", newLabel);
+  }
+};
+
+const openMenu = (menuTrigger, menu, allMenuItems, className) => {
+  const handleEscapeKeyPress = (event) => {
+    if (event.key === "Escape") {
+      toggleMenu({ menuTrigger, menu, className });
+      document.removeEventListener("keyup", handleEscapeKeyPress);
     }
+  };
+
+  menuTrigger.setAttribute("aria-expanded", "true");
+  menu.setAttribute("aria-hidden", "false");
+  if (allMenuItems) {
+    allMenuItems.item(0).focus();
   } else {
-    console.error("Invalid element provided to toggleClass function");
+    return;
+  }
+
+  document.addEventListener("keyup", handleEscapeKeyPress);
+
+  allMenuItems.forEach((menuItem, index) => {
+    const handleArrowKeyPress = () =>
+      handleArrowKey(event, index, allMenuItems);
+    menuItem.addEventListener("keyup", handleArrowKeyPress);
+  });
+};
+
+const handleArrowKey = (event, index, allMenuItems) => {
+  const isLastMenuItem = index === allMenuItems.length - 1;
+  const isFirstMenuItem = index === 0;
+  const nextMenuItem = allMenuItems.item(index + 1);
+  const prevMenuItem = allMenuItems.item(index - 1);
+
+  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+    if (isLastMenuItem) {
+      allMenuItems.item(0).focus();
+      return;
+    }
+    nextMenuItem.focus();
+  }
+  if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+    if (isFirstMenuItem) {
+      allMenuItems.item(allMenuItems.length - 1).focus();
+      return;
+    }
+    prevMenuItem.focus();
   }
 };
 
 alertButton.addEventListener("click", () =>
-  toggleClass({
+  toggleMenu({
     className: "alert-active",
-    targetElement: notificationMenu,
-    triggerElement: alertButton,
+    menu: notificationMenu,
+    menuTrigger: alertButton,
   })
 );
 
 profileButton.addEventListener("click", () =>
-  toggleClass({
+  toggleMenu({
     className: "profile-active",
-    targetElement: profileNav,
-    triggerElement: profileButton,
-    meuItemsSelector: '[role="menuitem"]',
-    labelWhenClosed: "Show Profile",
+    menu: profileNav,
+    menuTrigger: profileButton,
+    menuItemsSelector: '[role="menuitem"]',
     labelWhenOpen: "Hide Profile",
+    labelWhenClosed: "Show Profile",
   })
 );
 

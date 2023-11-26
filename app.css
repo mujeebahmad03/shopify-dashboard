@@ -71,15 +71,6 @@ body {
   display: flex;
 }
 
-.logo {
-  position: relative;
-  display: inline-block;
-}
-
-.logo img {
-  max-width: 100%;
-}
-
 .search-bar {
   display: flex;
   width: 480px;
