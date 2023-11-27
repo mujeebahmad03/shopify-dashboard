@@ -64,6 +64,7 @@ body {
   margin: auto;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
 }
 
 .top-header,
@@ -74,47 +75,39 @@ body {
 .search-bar {
   display: flex;
   width: 480px;
-  height: 32px;
-  padding: 8px;
   align-items: center;
-  gap: 6px;
   position: relative;
   font-size: 13px;
   border-radius: 8px;
 }
 
-.search-bar svg {
-  display: inline;
-  position: absolute;
-  top: 7px;
-  left: 15px;
-  margin-right: 6px;
+.search-bar input {
+  padding-right: 8px;
+  padding-left: 34px;
+  width: 100%;
+  height: 32px;
+  background-repeat: no-repeat;
+  background-position: 8px center;
+  background-size: 20px 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 13 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.82264 10.3833C7.89957 11.0841 6.74835 11.5 5.5 11.5C2.46243 11.5 0 9.03757 0 6C0 2.96243 2.46243 0.5 5.5 0.5C8.53757 0.5 11 2.96243 11 6C11 7.24835 10.5841 8.39957 9.8833 9.32264L12.7803 12.2197C13.0732 12.5126 13.0732 12.9874 12.7803 13.2803C12.4874 13.5732 12.0126 13.5732 11.7197 13.2803L8.82264 10.3833ZM9.5 6C9.5 8.20914 7.70914 10 5.5 10C3.29086 10 1.5 8.20914 1.5 6C1.5 3.79086 3.29086 2 5.5 2C7.70914 2 9.5 3.79086 9.5 6Z" fill="%23B5B5B5"/></svg>');
+  border-radius: 8px;
+  border: 1px solid var(--strokes-grey-2, #616161);
+  background-color: var(--grey-nav-200);
+  transition: 0.3s;
 }
 
 .search-bar input,
 .alert,
 .profile-tag {
-  background: var(--grey-nav-200);
+  background-color: var(--grey-nav-200);
   color: var(--font-grey-1);
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 0.5rem 2rem;
-  border-radius: 8px;
-  border: 1px solid var(--strokes-grey-2, #616161);
-  background: var(--grey-nav-200);
-  transition: 0.3s;
 }
 
 .search-bar input:hover {
   border: 1px solid var(--strokes-grey-1);
 }
 
-.search-bar input:focus {
-  border: 2px solid var(--bg-white);
-}
-
+.search-bar input:focus,
 .search-bar input:active {
   border: 2px solid var(--bg-white);
 }
@@ -152,9 +145,9 @@ body {
 
 .alert:focus,
 .profile-tag:focus {
+  outline: 3px solid var(--state-focused);
+  outline-offset: 1px;
   background: var(--grey-nav-50);
-  box-shadow: 0px 0px 0px 3px #005bd3, 0px 0px 0px 1px #000;
-  background: var(--grey-nav-100);
 }
 
 .alert:active,
@@ -176,8 +169,7 @@ body {
   position: absolute;
   top: 65px;
   right: 0;
-  z-index: -1;
-  opacity: 0;
+  z-index: 10;
   visibility: hidden;
   margin: 0 1rem;
   background: var(--bg-white);
@@ -185,6 +177,8 @@ body {
   font-size: 0.8rem;
   border: 1px solid var(--stroke-s-50, #dbdbdb);
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05);
+  max-height: 0;
+  transition: max-height 500ms ease-in-out;
 }
 
 .notification {
@@ -200,9 +194,9 @@ body {
   color: var(--grey-nav-200);
 }
 
-.notification-title .button-group button:focus .marked rect {
-  stroke-width: 1px;
-  stroke: var(--states-focused, #005bd3);
+.notification-title .button-group button:focus {
+  outline: 1px solid var(--state-focused);
+  outline-offset: 1px;
 }
 
 .notification p {
@@ -243,9 +237,8 @@ body {
 
 .alert-active,
 .profile-active {
-  opacity: 1;
   visibility: visible;
-  z-index: 10;
+  max-height: 1000px;
 }
 
 .profile-title a {
@@ -398,12 +391,21 @@ body {
 }
 
 .toggle-list {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
-  padding: 6px 12px;
   border-radius: 6px;
   transition: background var(--transition-prop);
+}
+
+.toggle-list svg {
+  transition: transform var(--transition-prop);
+}
+
+.toggle-list[aria-expanded="true"] svg {
+  transform: rotate(180deg);
 }
 
 .toggle-list:hover {
@@ -418,21 +420,6 @@ body {
   border: 2px solid var(--state-focused);
 }
 
-.toggle-list svg {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  transition: opacity var(--transition-prop);
-}
-
-.down-arrow {
-  opacity: 0;
-}
-
-.up-arrow {
-  opacity: 1;
-}
-
 .setup-guide {
   padding: 8px;
   display: flex;
@@ -441,7 +428,7 @@ body {
   color: var(--grey-nav-200);
 }
 
-.setup-info h3{
+.setup-info h3 {
   margin-bottom: 4px;
   font-size: 14px;
   font-weight: 600;
@@ -477,7 +464,13 @@ body {
 }
 
 .setup-guide-plan {
-  display: block;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 500ms ease-in-out;
+}
+
+.setup-guide-plan.plan-active {
+  max-height: 1000px;
 }
 
 .guide-list {
@@ -532,7 +525,8 @@ body {
 
 .check-box {
   display: block;
-  height: fit-content;
+  width: 30px;
+  height: 30px;
   position: relative;
   border-radius: 6px;
   transition: all var(--transition-prop);
@@ -547,21 +541,21 @@ body {
 }
 
 .check-box:focus {
-  border: 2px solid var(--states-focused, #005bd3);
+  outline: 2px solid var(--states-focused, #005bd3);
+  outline-offset: 2px;
   background: #fff;
 }
 
 .svg-container {
   position: relative;
-  width: 30px;
-  height: 30px;
 }
 
-.svg-container:hover .unchecked circle {
+.check-box:hover .unchecked circle {
   stroke-dasharray: 0 0;
 }
-.svg-container:focus .unchecked circle {
+.check-box:focus .unchecked circle {
   stroke-dasharray: 0 0;
+  fill: #d9d9d9;
 }
 
 .loading {
@@ -592,16 +586,16 @@ body {
   animation: zoom-in 0.3s linear;
 }
 
-.svg-container .unchecked circle {
+.check-box .unchecked circle {
   transition: all var(--transition-prop);
 }
 
-.svg-container svg.active {
+.check-box svg.active {
   opacity: 1;
   visibility: visible;
 }
 
-.svg-container svg {
+.check-box svg {
   transition: 250ms;
   position: absolute;
   top: 3px;
@@ -619,6 +613,11 @@ body {
   align-items: flex-start;
   gap: 16px;
   flex: 1 0 0;
+}
+
+.btn-dark,
+.white-btn {
+  transition: all var(--transition-prop);
 }
 
 .btn-dark {
@@ -644,27 +643,35 @@ body {
 }
 
 .btn-dark:focus {
-  box-shadow: 0px 0px 0px 5px #005bd3, 0px 0px 0px 3px #fff,
-    0px 0px 0px 1.5px #333;
+  outline: 3px solid var(--state-focused);
+  outline-offset: 3px;
+  margin-left: 6px;
+  margin-bottom: 6px;
 }
 
-.list-info .button-group button:last-child {
+.btn-dark:focus + .white-btn {
+  margin-bottom: 6px;
+}
+
+.white-btn {
   background: inherit;
   color: var(--grey-nav-300);
   border-radius: 6px;
   padding: 6px 12px;
 }
 
-.list-info .button-group button:last-child:hover {
+.white-btn:hover {
   background: #e7e7e7;
 }
 
-.list-info .button-group button:last-child:active {
+.white-btn:active {
   background: #e0e0e0;
 }
 
-.list-info .button-group button:last-child:active {
+.white-btn:focus {
   border: 2px solid var(--states-focused, #005bd3);
+  background: var(--bg-white);
+  padding: 7px 12px;
 }
 
 .illustration {

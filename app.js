@@ -2,7 +2,9 @@ const alertButton = document.getElementById("alert-button");
 const profileButton = document.getElementById("profile-button");
 const notificationMenu = document.getElementById("notification-menu");
 const profileNav = document.getElementById("profile-nav");
-const toggleBtn = document.getElementById("toggle-btn");
+const toggleOnboardingSteps = document.getElementById(
+  "toggle-onboarding-steps"
+);
 const closeBtn = document.getElementById("close-btn");
 const ctaSection = document.getElementById("cta-section");
 const downArrow = document.querySelector(".down-arrow");
@@ -17,15 +19,25 @@ function toggleState(buttonIndex) {
   const checkedSvg = currentListItem.querySelector(".checked");
   const loadingSvg = currentListItem.querySelector(".loading");
 
+  const checkboxButton = currentListItem.querySelector(".check-box");
+  const isChecked = checkedSvg.classList.contains("active");
+  checkboxButton.setAttribute("aria-checked", isChecked.toString());
+
+  if (isChecked) {
+    currentListItem.querySelector(".list-details").classList.remove("active");
+  }
+  // Get the list title for updating the aria-label
+  const listTitle = currentListItem.querySelector(".list-title").textContent;
+
   // Update progress bar based on checked state
   const progressBar = document.getElementById("progress-bar");
   const progressCount = document.getElementById("progress-count");
 
   const currentValue = parseInt(progressCount.textContent);
-  const increment = checkedSvg.classList.contains("active") ? -1 : 1;
+  const increment = isChecked ? -1 : 1;
   const newValue = Math.min(Math.max(currentValue + increment, 0), 5);
 
-  if (checkedSvg.classList.contains("active")) {
+  if (isChecked) {
     // toggle off
     loadingSvg.classList.add("active");
     checkedSvg.classList.remove("active");
@@ -35,6 +47,10 @@ function toggleState(buttonIndex) {
       loadingSvg.classList.remove("active");
       updateProgressBar(newValue);
       showNextIncompleteStep(currentListItem);
+      checkboxButton.setAttribute(
+        "aria-label",
+        `Mark ${listTitle} as not completed`
+      );
     }, 500);
   } else {
     // toggle on
@@ -46,6 +62,10 @@ function toggleState(buttonIndex) {
       checkedSvg.classList.add("active");
       updateProgressBar(newValue);
       showNextIncompleteStep(currentListItem);
+      checkboxButton.setAttribute(
+        "aria-label",
+        `Mark ${listTitle} as completed`
+      );
     }, 500);
   }
 
@@ -54,6 +74,17 @@ function toggleState(buttonIndex) {
     const newWidth = value * incrementPercentage;
     progressBar.style.width = `${newWidth}%`;
     progressCount.textContent = value;
+
+    // Announce the change to screen readers
+    progressBar.setAttribute("aria-valuenow", value);
+    progressBar.setAttribute("aria-valuetext", `${value} out of 5 completed`);
+    progressBar.setAttribute("aria-live", "polite");
+    progressBar.setAttribute("aria-relevant", "all");
+
+    // Reset aria-live after a short delay to allow multiple updates to be announced
+    setTimeout(() => {
+      progressBar.setAttribute("aria-live", "off");
+    }, 100);
   }
 
   function showNextIncompleteStep(currentStep) {
@@ -171,8 +202,8 @@ const toggleAriaLabel = (
 ) => {
   if (menuTrigger.getAttribute("aria-label")) {
     const newLabel = isExpanded
-      ? labelWhenOpen || "Expanded"
-      : labelWhenClosed || "Collapsed";
+      ? labelWhenClosed || "Collapsed"
+      : labelWhenOpen || "Exapanded";
     menuTrigger.setAttribute("aria-label", newLabel);
   }
 };
@@ -187,7 +218,7 @@ const openMenu = (menuTrigger, menu, allMenuItems, className) => {
 
   menuTrigger.setAttribute("aria-expanded", "true");
   menu.setAttribute("aria-hidden", "false");
-  if (allMenuItems) {
+  if (allMenuItems.item(0)) {
     allMenuItems.item(0).focus();
   } else {
     return;
@@ -196,7 +227,7 @@ const openMenu = (menuTrigger, menu, allMenuItems, className) => {
   document.addEventListener("keyup", handleEscapeKeyPress);
 
   allMenuItems.forEach((menuItem, index) => {
-    const handleArrowKeyPress = () =>
+    const handleArrowKeyPress = (event) =>
       handleArrowKey(event, index, allMenuItems);
     menuItem.addEventListener("keyup", handleArrowKeyPress);
   });
@@ -229,6 +260,9 @@ alertButton.addEventListener("click", () =>
     className: "alert-active",
     menu: notificationMenu,
     menuTrigger: alertButton,
+    labelWhenOpen: "Hide Notification menu",
+    labelWhenClosed: "Show Notification menu",
+    menuItemsSelector: '[role="menuitem"]',
   })
 );
 
@@ -238,8 +272,8 @@ profileButton.addEventListener("click", () =>
     menu: profileNav,
     menuTrigger: profileButton,
     menuItemsSelector: '[role="menuitem"]',
-    labelWhenOpen: "Hide Profile",
-    labelWhenClosed: "Show Profile",
+    labelWhenOpen: "Hide Profile Menu",
+    labelWhenClosed: "Show Profile Menu",
   })
 );
 
@@ -248,14 +282,11 @@ closeBtn.addEventListener("click", () => {
   ctaSection.setAttribute("aria-hidden", "true");
 });
 
-// Set initial state
-downArrow.style.opacity = "0";
-upArrow.style.opacity = "1";
-
-toggleBtn.addEventListener("click", function () {
-  downArrow.style.opacity = downArrow.style.opacity === "0" ? "1" : "0";
-  upArrow.style.opacity = upArrow.style.opacity === "1" ? "0" : "1";
-
-  setupGuidePlan.style.display =
-    upArrow.style.opacity === "1" ? "block" : "none";
+toggleOnboardingSteps.addEventListener("click", () => {
+  toggleMenu({
+    className: "plan-active",
+    menu: setupGuidePlan,
+    menuTrigger: toggleOnboardingSteps,
+    menuItemsSelector: '[role="menuitem"]',
+  });
 });
