@@ -41,6 +41,7 @@ function toggleState(buttonIndex) {
     // toggle off
     loadingSvg.classList.add("active");
     checkedSvg.classList.remove("active");
+    progressCount.setAttribute("aria-label", "Loading, please wait...");
 
     setTimeout(function () {
       uncheckedSvg.classList.add("active");
@@ -49,13 +50,21 @@ function toggleState(buttonIndex) {
       showNextIncompleteStep(currentListItem);
       checkboxButton.setAttribute(
         "aria-label",
-        `Mark ${listTitle} as not completed`
+        `Marked ${listTitle} as not completed`
       );
-    }, 500);
+      checkboxButton.setAttribute("aria-checked", "false");
+
+      progressCount.setAttribute(
+        "aria-label",
+        `Successfully Marked ${listTitle} as not completed`
+      );
+    }, 3000);
   } else {
     // toggle on
     uncheckedSvg.classList.remove("active");
     loadingSvg.classList.add("active");
+
+    progressCount.setAttribute("aria-label", "Loading, please wait...");
 
     setTimeout(function () {
       loadingSvg.classList.remove("active");
@@ -64,26 +73,25 @@ function toggleState(buttonIndex) {
       showNextIncompleteStep(currentListItem);
       checkboxButton.setAttribute(
         "aria-label",
-        `Mark ${listTitle} as completed`
+        `Marked ${listTitle} as completed`
       );
-    }, 500);
+      checkboxButton.setAttribute("aria-checked", "true");
+      progressCount.setAttribute(
+        "aria-label",
+        `Successfully Marked ${listTitle} as completed`
+      );
+    }, 3000);
   }
 
   function updateProgressBar(value) {
     const incrementPercentage = 20;
     const newWidth = value * incrementPercentage;
     progressBar.style.width = `${newWidth}%`;
-    progressCount.textContent = value;
-
-    // Announce the change to screen readers
-    progressBar.setAttribute("aria-valuenow", value);
-    progressBar.setAttribute("aria-valuetext", `${value} out of 5 completed`);
-    progressBar.setAttribute("aria-live", "polite");
-    progressBar.setAttribute("aria-relevant", "all");
+    progressCount.textContent = `${value} / 5 completed`;
 
     // Reset aria-live after a short delay to allow multiple updates to be announced
     setTimeout(() => {
-      progressBar.setAttribute("aria-live", "off");
+      progressCount.setAttribute("aria-live", "off");
     }, 100);
   }
 
@@ -288,5 +296,7 @@ toggleOnboardingSteps.addEventListener("click", () => {
     menu: setupGuidePlan,
     menuTrigger: toggleOnboardingSteps,
     menuItemsSelector: '[role="menuitem"]',
+    labelWhenOpen: "Hide Setup guide Menu",
+    labelWhenClosed: "Show Setup guide Menu",
   });
 });
