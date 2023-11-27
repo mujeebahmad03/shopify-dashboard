@@ -158,11 +158,14 @@ function toggleListDetails(buttonIndex) {
   listItems.forEach((item) => {
     if (item !== currentListItem) {
       item.querySelector(".list-details").classList.remove("active");
+      item.querySelector(".list-details").setAttribute("aria-hidden", "true");
       item.classList.remove("is-active");
+      item.querySelector(".list-title").setAttribute("aria-expanded", "false");
     }
   });
 
   currentListItem.classList.add("is-active");
+  currentListItem.querySelector(".list-title").setAttribute("aria-expanded", "true");
   const listDetails = currentListItem.querySelector(".list-details");
   const isVisible = listDetails.classList.contains("active");
 
@@ -170,6 +173,7 @@ function toggleListDetails(buttonIndex) {
     // Toggle the visibility of list-details only if it's not already visible
     // or if it's visible but corresponds to a different list-title
     listDetails.classList.toggle("active");
+    listDetails.setAttribute("aria-hidden", "false");
     visibleListDetails = isVisible ? null : listDetails;
   }
 }
