@@ -23,9 +23,6 @@ function toggleState(buttonIndex) {
   const isChecked = checkedSvg.classList.contains("active");
   checkboxButton.setAttribute("aria-checked", isChecked.toString());
 
-  if (isChecked) {
-    currentListItem.querySelector(".list-details").classList.remove("active");
-  }
   // Get the list title for updating the aria-label
   const listTitle = currentListItem.querySelector(".list-title").textContent;
 
@@ -176,6 +173,7 @@ function hideListDetails(listItem) {
   listDetails.setAttribute("aria-hidden", "true");
   listItem.classList.remove("is-active");
   listItem.querySelector(".list-title").setAttribute("aria-expanded", "false");
+  listItem.querySelector(".check-box").setAttribute("aria-expanded", "false");
 }
 
 // Show/Hide list-details based on its current state
@@ -185,6 +183,7 @@ function showHideListDetails(listItem) {
 
   listItem.classList.add("is-active");
   listItem.querySelector(".list-title").setAttribute("aria-expanded", "true");
+  listItem.querySelector(".check-box").setAttribute("aria-expanded", "true");
 
   if (!isVisible || (isVisible && listDetails !== visibleListDetails)) {
     listDetails.classList.toggle("active");
