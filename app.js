@@ -140,16 +140,20 @@ function toggleState(buttonIndex) {
   }
 }
 
-// Add event listener for list-title elements
+// Get all list-title elements
 const listTitles = document.querySelectorAll(".list-title");
+
+// Add click event listeners to list-title elements
 listTitles.forEach((title, index) => {
   title.addEventListener("click", () => {
     toggleListDetails(index + 1);
   });
 });
 
+// Keep track of the currently visible list-details
 let visibleListDetails = null;
 
+// Toggle the visibility of list-details based on buttonIndex
 function toggleListDetails(buttonIndex) {
   const listItems = document.querySelectorAll(".guide-list");
   const currentListItem = listItems[buttonIndex - 1];
@@ -157,21 +161,32 @@ function toggleListDetails(buttonIndex) {
   // Hide other list-details
   listItems.forEach((item) => {
     if (item !== currentListItem) {
-      item.querySelector(".list-details").classList.remove("active");
-      item.querySelector(".list-details").setAttribute("aria-hidden", "true");
-      item.classList.remove("is-active");
-      item.querySelector(".list-title").setAttribute("aria-expanded", "false");
+      hideListDetails(item);
     }
   });
 
-  currentListItem.classList.add("is-active");
-  currentListItem.querySelector(".list-title").setAttribute("aria-expanded", "true");
-  const listDetails = currentListItem.querySelector(".list-details");
+  // Show/Hide details for the clicked list-title
+  showHideListDetails(currentListItem);
+}
+
+// Hide list-details for a given list item
+function hideListDetails(listItem) {
+  const listDetails = listItem.querySelector(".list-details");
+  listDetails.classList.remove("active");
+  listDetails.setAttribute("aria-hidden", "true");
+  listItem.classList.remove("is-active");
+  listItem.querySelector(".list-title").setAttribute("aria-expanded", "false");
+}
+
+// Show/Hide list-details based on its current state
+function showHideListDetails(listItem) {
+  const listDetails = listItem.querySelector(".list-details");
   const isVisible = listDetails.classList.contains("active");
 
+  listItem.classList.add("is-active");
+  listItem.querySelector(".list-title").setAttribute("aria-expanded", "true");
+
   if (!isVisible || (isVisible && listDetails !== visibleListDetails)) {
-    // Toggle the visibility of list-details only if it's not already visible
-    // or if it's visible but corresponds to a different list-title
     listDetails.classList.toggle("active");
     listDetails.setAttribute("aria-hidden", "false");
     visibleListDetails = isVisible ? null : listDetails;
